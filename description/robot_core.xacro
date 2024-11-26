@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<robot name="qadru_bot">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="qadru_bot">
+
 
   <!-- Root Link (base_link) -->
   <link name="base_link"/>
@@ -22,10 +23,30 @@
   </joint>
 
 
-  <!-- Thigh Front Left Link -->
+
+  <!-- Front Left Thigh -->
+  <link name="thigh_base_fl">
+    <!-- Intermediate link for X-axis rotation -->
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Joint for X-axis rotation -->
+  <joint name="thigh_joint_fl_x" type="revolute">
+    <parent link="body"/>
+    <child link="thigh_base_fl"/>
+    <origin xyz="0.24 0.03 -0.025" rpy="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <!-- Left front thigh link -->
   <link name="thigh_fl">
     <visual>
-      <!-- Position the mesh so the upper end aligns with the joint -->
       <origin xyz="0 0.03 -0.075" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://qadru_bot/meshes/thigh_link.stl" scale="1 1 1"/>
@@ -33,23 +54,40 @@
     </visual>
   </link>
 
-  <!-- Revolute Joint: body to front left thigh -->
-  <joint name="thigh_joint_fl" type="revolute">
-    <parent link="body"/>
+  <!-- Joint for Y-axis rotation -->
+  <joint name="thigh_joint_fl_y" type="revolute">
+    <parent link="thigh_base_fl"/>
     <child link="thigh_fl"/>
-    <!-- Attach the joint at the upper end of the thigh -->
-    <origin xyz="0.24 0.03 -0.025" rpy="0 0 0"/>
-    <!-- Rotate along the Y-axis -->
+    <origin xyz="0 0 0" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
-    <!-- Limits for rotation -->
+    <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <!-- Front Left Shank -->
+  <link name="shank_fl">
+    <visual>
+      <origin xyz="0 0 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qadru_bot/meshes/shank.stl" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <!-- Joint connecting thigh to shank -->
+  <joint name="shank_joint_fl" type="revolute">
+    <parent link="thigh_fl"/>
+    <child link="shank_fl"/>
+    <origin xyz="0 0.05 -0.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
     <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
   </joint>
 
 
-  <!-- Thigh Rear Left Link -->
+
+
+  <!-- Rear Left -->
   <link name="thigh_rl">
     <visual>
-      <!-- Position the mesh so the upper end aligns with the joint -->
       <origin xyz="0 0.03 -0.075" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://qadru_bot/meshes/thigh_link.stl" scale="1 1 1"/>
@@ -57,23 +95,34 @@
     </visual>
   </link>
 
-  <!-- Revolute Joint: body to rear left thigh -->
   <joint name="thigh_joint_rl" type="revolute">
     <parent link="body"/>
     <child link="thigh_rl"/>
-    <!-- Attach the joint at the upper end of the thigh -->
     <origin xyz="-0.24 0.03 -0.025" rpy="0 0 0"/>
-    <!-- Rotate along the Y-axis -->
     <axis xyz="0 1 0"/>
-    <!-- Limits for rotation -->
     <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
   </joint>
 
+  <link name="shank_rl">
+    <visual>
+      <origin xyz="0 0 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qadru_bot/meshes/shank.stl" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
 
-  <!-- Thigh Rear Right Link -->
+  <joint name="shank_joint_rl" type="revolute">
+    <parent link="thigh_rl"/>
+    <child link="shank_rl"/>
+    <origin xyz="0 0.05 -0.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <!-- Rear Right -->
   <link name="thigh_rr">
     <visual>
-      <!-- Position the mesh so the upper end aligns with the joint -->
       <origin xyz="0 -0.03 -0.075" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://qadru_bot/meshes/thigh_link.stl" scale="1 1 1"/>
@@ -81,23 +130,34 @@
     </visual>
   </link>
 
-  <!-- Revolute Joint: body to rear right thigh -->
   <joint name="thigh_joint_rr" type="revolute">
     <parent link="body"/>
     <child link="thigh_rr"/>
-    <!-- Attach the joint at the upper end of the thigh -->
     <origin xyz="-0.24 -0.03 -0.025" rpy="0 0 0"/>
-    <!-- Rotate along the Y-axis -->
     <axis xyz="0 1 0"/>
-    <!-- Limits for rotation -->
     <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
   </joint>
 
+  <link name="shank_rr">
+    <visual>
+      <origin xyz="0 0 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qadru_bot/meshes/shank.stl" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
 
-  <!-- Thigh Front Right Link -->
+  <joint name="shank_joint_rr" type="revolute">
+    <parent link="thigh_rr"/>
+    <child link="shank_rr"/>
+    <origin xyz="0 -0.05 -0.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+  <!-- Front Right -->
   <link name="thigh_fr">
     <visual>
-      <!-- Position the mesh so the upper end aligns with the joint -->
       <origin xyz="0 -0.03 -0.075" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://qadru_bot/meshes/thigh_link.stl" scale="1 1 1"/>
@@ -105,16 +165,29 @@
     </visual>
   </link>
 
-  <!-- Revolute Joint: body to front right thigh -->
   <joint name="thigh_joint_fr" type="revolute">
     <parent link="body"/>
     <child link="thigh_fr"/>
-    <!-- Attach the joint at the upper end of the thigh -->
     <origin xyz="0.24 -0.03 -0.025" rpy="0 0 0"/>
-    <!-- Rotate along the Y-axis -->
     <axis xyz="0 1 0"/>
-    <!-- Limits for rotation -->
     <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
   </joint>
 
-</robot>
+  <link name="shank_fr">
+    <visual>
+      <origin xyz="0 0 -0.075" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://qadru_bot/meshes/shank.stl" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="shank_joint_fr" type="revolute">
+    <parent link="thigh_fr"/>
+    <child link="shank_fr"/>
+    <origin xyz="0 -0.05 -0.15" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="10" velocity="1.0" lower="-1.57" upper="1.57"/>
+  </joint>
+
+</robot> 
